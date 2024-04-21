@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Order</title>
+</head>
+<body>
+    <form method="POST" th:action="@{/orders}" th:object="${tacoOrder}">
+        <h1 th:text="${tacoOrder}? 'Complete order' : 'No Tacos, please go to design' "></h1>
+        <h1>Order your Taco creations</h1>
+        <div th:unless = "${tacoOrder}">
+            <img th:src="@{/images/emptyPlate.jpg}"  height="250px"/>
+        </div>
+        <div th:if = "${tacoOrder}">
+            <img th:src="@{/images/plateWithTacos.jpg}"  height="250px"/>
+        </div>
+
+        <h3>Your Tacos in this order:</h3>
+        <a th:href = "@{/design}" id = "another">Design another Taco</a>
+        <ul>
+            <li th:each= "taco : ${tacoOrder?.tacos}">
+                <span th:text = "${taco.name}"/>
+            </li>
+        </ul>
+
+        <h3>Deliver my Tacos to ...</h3>
+        <label for="deliveryName">Name: </label>
+        <input type="text" placeholder="name" th:field="*{deliveryName}"/>
+        <label for="deliveryStreet">Street address: </label>
+        <input type="text" th:field="*{deliveryStreet}"/>
+        <label for="deliveryCity">City: </label>
+        <input type="text" th:field="*{deliveryCity}"/>
+        <label for="deliveryState">State: </label>
+        <input type="text" th:field="*{deliveryState}"/>
+        <label for="deliveryZip">Zip code: </label>
+        <input type="text" th:field="*{deliveryZip}"/>
+        <h3>Here’s how I’ll pay...</h3>
+        <label for="ccNumber">Credit Card #: </label>
+        <input type="text" th:field="*{ccNumber}"/>
+        <label for="ccExpiration">Expiration: </label>
+        <input type="text" th:field="*{ccExpiration}"/>
+        <label for="ccCVV">CVV: </label>
+        <input type="text" th:field="*{ccCVV}"/>
+        <br/><br/>
+
+
+
+
+        <input type="submit" value="Submit order"/>
+    </form>
+
+</body>
+</html>

@@ -8,5 +8,5 @@ import java.util.List;
 public class Taco {
     private String name;
 
-    private List ingredients;
+    private List<Ingredient> ingredients;
 }

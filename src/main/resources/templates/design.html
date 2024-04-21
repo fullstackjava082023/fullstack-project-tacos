@@ -3,29 +3,33 @@
 <head>
     <meta charset="UTF-8" >
     <title>Design</title>
+    <link rel="stylesheet" th:href="@{styles/styles.css}">
 </head>
 <body>
 
-<!--    <a th:href = @{http://google.com}> google </a>-->
 
     <img th:src="@{/images/designTaco.jpg}"  height="250px"/>
     <h1>Hi it is design page</h1>
-    <form method="POST">
+    <form method="POST" th:object="${taco}">
         <div>
             <h3>Choose the Taco Name:</h3>
-            <input type="text" name="tacoName">
+            <input type="text" th:field="*{name}">
+            <span class = "validationError"
+                th:if = "${tacoNameError}"
+                th:text = "${tacoNameError}"/>
+
         </div>
         <div class ="ingredient-group" id="wrap">
             <h3>Design your wrap:</h3>
             <div th:each = "ingredient : ${wrap}">
-                <input type="checkbox" name ="selectedIngredients" th:value="${ingredient.name}" >
-                <span th:text = "${ingredient.name}">INGREDIENT</span>
+                <input type="checkbox" th:field ="*{ingredients}" th:value="${ingredient.name}" >
+                <span th:text = "${ingredient.name}">WRAP</span>
             </div>
         </div>
         <div class ="ingredient-group" id="protein">
             <h3>Choose your meat:</h3>
             <div th:each = "ingredient : ${protein}">
-                <input type="checkbox" name ="selectedIngredients" th:value="${ingredient.name}" >
+                <input type="checkbox" th:field ="*{ingredients}" th:value="${ingredient.name}" >
                 <span th:text = "${ingredient.name}">PROTEIN</span>
             </div>
 
@@ -33,7 +37,7 @@
         <div class ="ingredient-group" id="veggies">
             <h3>Choose your veggies:</h3>
             <div th:each = "ingredient : ${veggies}">
-                <input type="checkbox" name ="selectedIngredients" th:value="${ingredient.name}" >
+                <input type="checkbox" th:field ="*{ingredients}" th:value="${ingredient.name}" >
                 <span th:text = "${ingredient.name}">VEGGIES</span>
             </div>
 
@@ -41,7 +45,7 @@
         <div class ="ingredient-group" id="cheese">
             <h3>Choose your cheese:</h3>
             <div th:each = "ingredient : ${cheese}">
-                <input type="checkbox" name ="selectedIngredients" th:value="${ingredient.name}" >
+                <input type="checkbox" th:field ="*{ingredients}" th:value="${ingredient.name}" >
                 <span th:text = "${ingredient.name}">CHEESE</span>
             </div>
 
@@ -49,11 +53,14 @@
         <div class ="ingredient-group" id="sauce">
             <h3>Choose your sauce:</h3>
             <div th:each = "ingredient : ${sauce}">
-                <input type="checkbox" name ="selectedIngredients" th:value="${ingredient.name}" >
+                <input type="checkbox" th:field ="*{ingredients}" th:value="${ingredient.name}" >
                 <span th:text = "${ingredient.name}">SAUCE</span>
             </div>
         </div>
         <button>Submit your Taco</button>
+        <span class = "validationError"
+              th:if = "${emptyIngredientsError}"
+              th:text = "${emptyIngredientsError}"/>
     </form>
 
 </body>
