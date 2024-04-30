@@ -4,10 +4,12 @@ import com.example.fullstackprojecttacos.model.Ingredient;
 import com.example.fullstackprojecttacos.model.Taco;
 import com.example.fullstackprojecttacos.model.TacoOrder;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.example.fullstackprojecttacos.model.Ingredient.Type;
@@ -46,19 +48,8 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processTaco(Model model,@ModelAttribute Taco taco1, @ModelAttribute TacoOrder tacoOrder) {
-        boolean hasErrors = false;
-        if (taco1 != null) {
-            if (taco1.getName() == null || taco1.getName().isBlank()) {
-                model.addAttribute("tacoNameError", "Name Must not be empty");
-                hasErrors = true;
-            }
-            if (taco1.getIngredients() == null || taco1.getIngredients().isEmpty()) {
-                model.addAttribute("emptyIngredientsError", "Select at least one ingredient");
-                hasErrors = true;
-            }
-        }
-        if (hasErrors) {
+    public String processTaco(@Valid Taco taco1, Errors errors, @ModelAttribute TacoOrder tacoOrder) {
+        if (errors.hasErrors()) {
             return "/design";
         }
         //adding new taco after submit

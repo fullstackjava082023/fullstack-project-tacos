@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<html lang="en" xmlns:th = "https://www.thymeleaf.org/"
+        th:replace = "~{layout/layout :: layout(~{::title}, ~{::body})} ">
 <head>
     <meta charset="UTF-8">
     <title>Order</title>
 </head>
 <body>
+
     <form method="POST" th:action="@{/orders}" th:object="${tacoOrder}">
         <h1 th:text="${tacoOrder}? 'Complete order' : 'No Tacos, please go to design' "></h1>
         <h1>Order your Taco creations</h1>
@@ -48,6 +50,7 @@
 
         <input type="submit" value="Submit order"/>
     </form>
+
 
 </body>
 </html>

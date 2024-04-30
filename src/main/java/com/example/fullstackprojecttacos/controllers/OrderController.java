@@ -25,6 +25,7 @@ public class OrderController {
         //save to database
         //send emails
         //close the session
+
         log.info("Order Submitted : {} ", tacoOrder);
         sessionStatus.setComplete();
 

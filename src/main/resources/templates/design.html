@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<html lang="en" xmlns:th = "https://www.thymeleaf.org/"
+      th:replace = "~{layout/layout :: layout(~{::title}, ~{::body})}">
 <head>
     <meta charset="UTF-8" >
     <title>Design</title>
-    <link rel="stylesheet" th:href="@{styles/styles.css}">
+
 </head>
 <body>
+
 
 
     <img th:src="@{/images/designTaco.jpg}"  height="250px"/>
@@ -15,8 +17,8 @@
             <h3>Choose the Taco Name:</h3>
             <input type="text" th:field="*{name}">
             <span class = "validationError"
-                th:if = "${tacoNameError}"
-                th:text = "${tacoNameError}"/>
+                th:if = "${#fields.hasErrors('name')}"
+                th:errors = "*{name}"/>
 
         </div>
         <div class ="ingredient-group" id="wrap">
@@ -59,9 +61,10 @@
         </div>
         <button>Submit your Taco</button>
         <span class = "validationError"
-              th:if = "${emptyIngredientsError}"
-              th:text = "${emptyIngredientsError}"/>
+              th:if = "${#fields.hasErrors('ingredients')}"
+              th:errors = "*{ingredients}"/>
     </form>
+
 
 </body>
 </html>

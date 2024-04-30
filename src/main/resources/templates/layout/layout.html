@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+       th:fragment="layout (title, content)">
+<head>
+
+    <title th:replace="${title}">Layout</title>
+    <link rel="stylesheet" th:href="@{styles/styles.css}">
+</head>
+<body>
+  <div>
+      <button>shopping cart</button>
+  </div>
+  <div th:replace = "${content}">
+    this is content
+  </div>
+ <br><br><br><br><br><br>
+
+  <div th:insert = "~{partials/footer :: footer}">
+
+  </div>
+
+</body>
+</html>
