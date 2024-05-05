@@ -3,9 +3,13 @@ package com.example.fullstackprojecttacos.controllers;
 import com.example.fullstackprojecttacos.model.Ingredient;
 import com.example.fullstackprojecttacos.model.Taco;
 import com.example.fullstackprojecttacos.model.TacoOrder;
+import com.example.fullstackprojecttacos.repository.IngredientRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -27,19 +31,25 @@ import java.util.stream.Collectors;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
-    public static List<Ingredient> ingredients = Arrays.asList(
-            new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
-            new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
-            new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
-            new Ingredient("CARN", "Carnitas", Type.PROTEIN),
-            new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
-            new Ingredient("LETC", "Lettuce", Type.VEGGIES),
-            new Ingredient("CHED", "Cheddar", Type.CHEESE),
-            new Ingredient("JACK", "Monterrey Jack", Type.CHEESE),
-            new Ingredient("SLSA", "Salsa", Type.SAUCE),
-            new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
-    );
+
+    @Bean
+    public ApplicationRunner preloadData() {
+        return args -> {
+            ingredientRepository.save(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP));
+            ingredientRepository.save(new Ingredient("COTO", "Corn Tortilla", Type.WRAP));
+            ingredientRepository.save(new Ingredient("GRBF", "Ground Beef", Type.PROTEIN));
+            ingredientRepository.save(new Ingredient("CARN", "Carnitas", Type.PROTEIN));
+            ingredientRepository.save(new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES));
+            ingredientRepository.save(new Ingredient("LETC", "Lettuce", Type.VEGGIES));
+            ingredientRepository.save(new Ingredient("CHED", "Cheddar", Type.CHEESE));
+            ingredientRepository.save(new Ingredient("JACK", "Monterrey Jack", Type.CHEESE));
+            ingredientRepository.save(new Ingredient("SLSA", "Salsa", Type.SAUCE));
+            ingredientRepository.save(new Ingredient("SRCR", "Sour Cream", Type.SAUCE));
+        };
+    }
 
     //Spring injects the current model
     @GetMapping
@@ -70,9 +80,10 @@ public class DesignTacoController {
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
+        List<Ingredient> ingredientList = (List<Ingredient>) ingredientRepository.findAll();
         Type[] types = Type.values();
         for (Type type : types) {//5 iteration
-            List<Ingredient> ingredientsByType = filterByType(ingredients, type);
+            List<Ingredient> ingredientsByType = filterByType(ingredientList, type);
             model.addAttribute(type.toString().toLowerCase(), ingredientsByType);
         }
     }
