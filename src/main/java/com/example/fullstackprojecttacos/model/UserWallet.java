@@ -1,6 +1,5 @@
 package com.example.fullstackprojecttacos.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -11,18 +10,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ingredient {
-    @Id
-    private String id;
-    private String name;
-    private Type type;
-    private double price;
+public class UserWallet {
 
-
-    public enum Type {
-        WRAP, PROTEIN, VEGGIES, CHEESE, SAUCE
+    public UserWallet(Long id) {
+        this.id = id;
     }
 
-
-
+    @Id
+    private Long id;
+    private double balance;
 }

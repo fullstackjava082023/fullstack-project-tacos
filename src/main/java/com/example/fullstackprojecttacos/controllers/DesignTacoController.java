@@ -3,7 +3,9 @@ package com.example.fullstackprojecttacos.controllers;
 import com.example.fullstackprojecttacos.model.Ingredient;
 import com.example.fullstackprojecttacos.model.Taco;
 import com.example.fullstackprojecttacos.model.TacoOrder;
+import com.example.fullstackprojecttacos.model.UserWallet;
 import com.example.fullstackprojecttacos.repository.IngredientRepository;
+import com.example.fullstackprojecttacos.repository.UserWalletRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -22,32 +24,40 @@ import com.example.fullstackprojecttacos.model.Ingredient.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 //http:localhost:8080/
 @Controller
 @RequestMapping("/design")
 @Slf4j
-@SessionAttributes("tacoOrder")
+@SessionAttributes(names = {"tacoOrder", "mainWallet"})
 public class DesignTacoController {
 
     @Autowired
     private IngredientRepository ingredientRepository;
+    @Autowired
+    private UserWalletRepository userWalletRepository;
 
 
     @Bean
     public ApplicationRunner preloadData() {
         return args -> {
-            ingredientRepository.save(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP));
-            ingredientRepository.save(new Ingredient("COTO", "Corn Tortilla", Type.WRAP));
-            ingredientRepository.save(new Ingredient("GRBF", "Ground Beef", Type.PROTEIN));
-            ingredientRepository.save(new Ingredient("CARN", "Carnitas", Type.PROTEIN));
-            ingredientRepository.save(new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES));
-            ingredientRepository.save(new Ingredient("LETC", "Lettuce", Type.VEGGIES));
-            ingredientRepository.save(new Ingredient("CHED", "Cheddar", Type.CHEESE));
-            ingredientRepository.save(new Ingredient("JACK", "Monterrey Jack", Type.CHEESE));
-            ingredientRepository.save(new Ingredient("SLSA", "Salsa", Type.SAUCE));
-            ingredientRepository.save(new Ingredient("SRCR", "Sour Cream", Type.SAUCE));
+            ingredientRepository.save(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP, 0d));
+            ingredientRepository.save(new Ingredient("COTO", "Corn Tortilla", Type.WRAP, 2d));
+            ingredientRepository.save(new Ingredient("GRBF", "Ground Beef", Type.PROTEIN, 5d));
+            ingredientRepository.save(new Ingredient("CARN", "Carnitas", Type.PROTEIN, 3d));
+            ingredientRepository.save(new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES, 2d));
+            ingredientRepository.save(new Ingredient("LETC", "Lettuce", Type.VEGGIES, 1d));
+            ingredientRepository.save(new Ingredient("CHED", "Cheddar", Type.CHEESE, 4d));
+            ingredientRepository.save(new Ingredient("JACK", "Monterrey Jack", Type.CHEESE, 7d));
+            ingredientRepository.save(new Ingredient("SLSA", "Salsa", Type.SAUCE, 1d));
+            ingredientRepository.save(new Ingredient("SRCR", "Sour Cream", Type.SAUCE, 1d));
+            //to save global wallet with ID = 1
+            Optional<UserWallet> userWallet = userWalletRepository.findById(1L);
+            if (userWallet.isEmpty()) {
+                userWalletRepository.save(new UserWallet(1l, 0));
+            }
         };
     }
 
@@ -62,6 +72,9 @@ public class DesignTacoController {
         if (errors.hasErrors()) {
             return "/design";
         }
+        //adding to the total order price
+        double tacoPrice = taco1.calculateTotalPrice();
+        tacoOrder.setOrderPrice(tacoOrder.getOrderPrice() + tacoPrice);
         //adding new taco after submit
         tacoOrder.addTaco(taco1);
         log.info("Taco submitted: {}", taco1);
@@ -76,6 +89,11 @@ public class DesignTacoController {
     @ModelAttribute(name = "tacoOrder")
     public TacoOrder addOrderToModel() {
         return new TacoOrder();
+    }
+
+    @ModelAttribute(name = "mainWallet")
+    public UserWallet addWalletToModel() {
+        return userWalletRepository.findById(1L).orElse(null);
     }
 
     @ModelAttribute

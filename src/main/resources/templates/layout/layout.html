@@ -8,7 +8,8 @@
 </head>
 <body>
   <div>
-      <button>shopping cart</button>
+      <header th:replace="~{partials/OrderHeader :: orderHeader}"></header>
+      <br/>
   </div>
   <div th:replace = "${content}">
     this is content

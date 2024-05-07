@@ -21,6 +21,8 @@ public class TacoOrder {
     private String ccExpiration;
     private String ccCVV;
 
+    private double orderPrice;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="order_id")
     private List<Taco> tacos = new ArrayList<>();

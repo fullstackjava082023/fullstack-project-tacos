@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="orderHeader">
+    <div>
+        <button th:text="'&#128722; Your order: $' + ${tacoOrder?.orderPrice}">b1</button>
+<!--        global wallet-->
+        <span th:text = "'&#128176; ' +  ${mainWallet?.balance} "></span>
+    </div>
+</header>
+</body>
+</html>

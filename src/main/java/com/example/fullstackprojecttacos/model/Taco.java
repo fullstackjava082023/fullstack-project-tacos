@@ -12,6 +12,8 @@ import java.util.List;
 @Entity
 public class Taco {
 
+    private static double TACO_BASE_PRICE = 20d;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,4 +26,17 @@ public class Taco {
     @ManyToMany
     @Size(min = 1, message = "Select at least one ingredient")
     private List<Ingredient> ingredients;
+
+
+    /***
+     * Calculates total price of taco
+     * @return total price of taco
+     */
+    public double calculateTotalPrice() {
+        double totalPrice = TACO_BASE_PRICE;
+        for (Ingredient ingredient : ingredients) {
+            totalPrice += ingredient.getPrice();
+        }
+        return totalPrice;
+    }
 }
