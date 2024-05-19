@@ -1,10 +1,8 @@
 package com.example.fullstackprojecttacos.controllers;
 
-import com.example.fullstackprojecttacos.model.Ingredient;
-import com.example.fullstackprojecttacos.model.Taco;
-import com.example.fullstackprojecttacos.model.TacoOrder;
-import com.example.fullstackprojecttacos.model.UserWallet;
+import com.example.fullstackprojecttacos.model.*;
 import com.example.fullstackprojecttacos.repository.IngredientRepository;
+import com.example.fullstackprojecttacos.repository.UserRepository;
 import com.example.fullstackprojecttacos.repository.UserWalletRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -12,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -39,6 +39,11 @@ public class DesignTacoController {
     @Autowired
     private UserWalletRepository userWalletRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Bean
     public ApplicationRunner preloadData() {
@@ -58,6 +63,11 @@ public class DesignTacoController {
             if (userWallet.isEmpty()) {
                 userWalletRepository.save(new UserWallet(1l, 0));
             }
+            if (userRepository.findByUsername("admin") == null) {
+                userRepository.save(new TacoUser(1l,"admin", "admin",encoder.encode("admin"),
+                        "home", "home", "home", "home", "admin@gmail.com" ,"1234"));
+            }
+
         };
     }
 
