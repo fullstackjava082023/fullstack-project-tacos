@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{styles/styles.css}">
 </head>
 <body>
+  <div th:insert="~{partials/logout :: logoutPanel}"></div>
   <div>
       <header th:replace="~{partials/OrderHeader :: orderHeader}"></header>
       <br/>

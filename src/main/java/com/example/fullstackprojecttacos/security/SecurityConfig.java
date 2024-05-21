@@ -37,10 +37,15 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests(authorize -> authorize
-                .requestMatchers("/design", "/orders/**").authenticated()
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeRequests(authorize -> authorize
+                .requestMatchers("/design", "/orders/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN", "OIDC_USER", "OAUTH2_USER")
+                .requestMatchers("/adminPanel").hasRole("ADMIN")
                 .requestMatchers("/", "/**").permitAll())
-                .formLogin(withDefaults());
+                .oauth2Login(login -> login.loginPage("/login")) // spring gives default link
+                .formLogin(login -> login.loginPage("/login"))
+                .logout(logout -> logout.logoutSuccessUrl("/"));
 
         return http.build();
     }
