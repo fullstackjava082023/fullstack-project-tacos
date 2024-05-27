@@ -45,31 +45,7 @@ public class DesignTacoController {
     @Autowired
     private PasswordEncoder encoder;
 
-    @Bean
-    public ApplicationRunner preloadData() {
-        return args -> {
-            ingredientRepository.save(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP, 0d));
-            ingredientRepository.save(new Ingredient("COTO", "Corn Tortilla", Type.WRAP, 2d));
-            ingredientRepository.save(new Ingredient("GRBF", "Ground Beef", Type.PROTEIN, 5d));
-            ingredientRepository.save(new Ingredient("CARN", "Carnitas", Type.PROTEIN, 3d));
-            ingredientRepository.save(new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES, 2d));
-            ingredientRepository.save(new Ingredient("LETC", "Lettuce", Type.VEGGIES, 1d));
-            ingredientRepository.save(new Ingredient("CHED", "Cheddar", Type.CHEESE, 4d));
-            ingredientRepository.save(new Ingredient("JACK", "Monterrey Jack", Type.CHEESE, 7d));
-            ingredientRepository.save(new Ingredient("SLSA", "Salsa", Type.SAUCE, 1d));
-            ingredientRepository.save(new Ingredient("SRCR", "Sour Cream", Type.SAUCE, 1d));
-            //to save global wallet with ID = 1
-            Optional<UserWallet> userWallet = userWalletRepository.findById(1L);
-            if (userWallet.isEmpty()) {
-                userWalletRepository.save(new UserWallet(1l, 0));
-            }
-            if (userRepository.findByUsername("admin") == null) {
-                userRepository.save(new TacoUser(1l,"admin", "admin",encoder.encode("admin"),
-                        "home", "home", "home", "home", "admin@gmail.com" ,"1234"));
-            }
 
-        };
-    }
 
     //Spring injects the current model
     @GetMapping

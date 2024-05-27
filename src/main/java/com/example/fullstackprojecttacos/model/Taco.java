@@ -22,7 +22,6 @@ public class Taco {
     private String name;
 
 
-    @NotNull
     @ManyToMany
     @Size(min = 1, message = "Select at least one ingredient")
     private List<Ingredient> ingredients;
