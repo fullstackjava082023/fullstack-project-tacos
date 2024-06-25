@@ -1,0 +1,39 @@
+# deployment for the tacos-app DB pod
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tacos-app-deployment
+  labels:
+    app: tacos-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tacos-app
+  template:
+    metadata:
+      labels:
+        app: tacos-app
+    spec:
+      containers:
+        - name: tacos-app
+          image: shashkist/fullstack-project-tacos
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysql-service:3306/tacosProject?createDatabaseIfNotExist=true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: taco-app-service
+spec:
+  selector:
+    app: tacos-app
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30001

@@ -23,3 +23,17 @@ spec:
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: admin
+---
+# service for the mysql DB deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+
